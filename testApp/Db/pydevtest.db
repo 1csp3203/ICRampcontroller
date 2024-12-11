@@ -1,0 +1,147 @@
+#反射率取得レコード
+record(ai, "SWR") {
+    field(DESC, "Standing Wave Ratio")
+    field(SCAN, "1 second")          # 必要に応じて変更
+    ## field(DTYP, "stream")            # StreamDeviceを使用
+    field(INP, "@Reflection.proto getSWR L0")
+}
+
+# longin/longout PVs
+record(longout, "PyDev:Long:PrintVal") {
+  field(DTYP, "pydev")
+  field(OUT,  "@print('NAME: val=VAL')")
+  field(DESC, "Simply print record value to IOC console")
+}
+record(longout, "PyDev:Sleep") {
+  field(DTYP, "pydev")
+  field(OUT,  "@time.sleep(VAL)")
+}
+record(longout, "PyDev:Long:SetB") {
+  field(DTYP, "pydev")
+  field(OUT,  "@b=VAL")
+  field(VAL,  "1")
+  field(FLNK, "PyDev:Long:ReadB")
+}
+record(longin, "PyDev:Long:ReadB") {
+  field(DTYP, "pydev")
+  field(INP,  "@b")
+}
+
+# stringin/stringout PVs
+record(stringout, "PyDev:Log") {
+  field(DTYP, "pydev")
+  # Single quotes are needed around string based fields
+  field(OUT,  "@print('VAL')")
+}
+record(stringout, "PyDev:Exec") {
+  field(DTYP, "pydev")
+  # Write Python code to be executed dirctly to record
+  field(OUT,  "@VAL")
+}
+record(stringin, "PyDev:EscapeField") {
+  field(DTYP, "pydev")
+  # Use % sign when field to be replaced is part of the string
+  field(INP,  "@ThisIsRecord%VAL%")
+}
+
+# bi/bo PVs
+record(longin, "PyDev:Equal") {
+  field(DTYP, "pydev")
+  field(INP,  "@VAL == 10")
+  field(LOW,  "0")
+  field(LSV,  "MAJOR")
+}
+
+# mbbi/mbbo PVs
+record(mbbo, "PyDev:Enum:PrintVal") {
+  field(DTYP, "pydev")
+  field(OUT,  "@print('val=VAL rval=RVAL')")
+  field(ZRVL, "0")
+  field(ONVL, "10")
+  field(TWVL, "20")
+  field(ZRST, "zero")
+  field(ONST, "ten")
+  field(TWST, "twenty")
+}
+
+# ai/ao PVs
+record(ai, "PyDev:Double:Pow2") {
+  field(DTYP, "pydev")
+  field(INP,  "@VAL**2")
+}
+
+# waveform array PVs
+record(waveform, "PyDev:Array:Pow2") {
+  field(DTYP, "pydev")
+  field(INP,  "@list(map(lambda x: x**2, VAL))")
+  field(NELM, "5")
+  field(FTVL, "LONG")
+}
+record(waveform, "PyDev:Array:Stat") {
+  field(DTYP, "pydev")
+  field(INP,  "@[min(VAL),max(VAL),sum(VAL)/len(VAL)]")
+  field(NELM, "5")
+  field(FTVL, "DOUBLE")
+}
+
+record(waveform, "PyDev:Array:Strings") {
+  field(DTYP, "pydev")
+  field(INP,  "@[b'q3m2d1r', b'd05l2d1r', b'bm2d1r11', b'ABCDEFGHIJKLMNOPQRSTUVWXYZ.01234567890', b'm_beamport_22']")
+  field(NELM, "20")
+  field(FTVL, "STRING")
+  field(PINI, "YES")
+  field(TPRO, 1)
+}
+
+
+record(waveform, "PyDev:Array:Strings:Upper") {
+  field(DTYP, "pydev")
+  field(INP,  "@[v.upper() for v in %VAL%]")
+  field(NELM, "20")
+  field(FTVL, "STRING")
+  #field(PINI, "YES")
+  field(TPRO, 1)
+}
+
+# Custom Python code from python/pydevtest.py
+record(stringin, "PyDev:Google:Refresh") {
+  field(DTYP, "pydev")
+  field(INP,  "@google.get()")
+}
+record(stringin, "PyDev:Google:Rsp:Proto") {
+  field(DTYP, "pydev")
+  field(INP,  "@pydev.iointr('proto')")
+  field(SCAN, "I/O Intr")
+}
+record(longin, "PyDev:Google:Rsp:Code") {
+  field(DTYP, "pydev")
+  field(INP,  "@pydev.iointr('code')")
+  field(SCAN, "I/O Intr")
+}
+
+record(bo, "PyDev:NewLine") {
+  field(DTYP, "pydev")
+  field(OUT,  "@print('Hello\nworld!')")
+}
+
+# Testing concurrent Python threads
+record(longout, "PyDev:Threads:Exec1") {
+  field(DTYP, "pydev")
+  field(OUT,  "@time.sleep(1.0)")
+#  field(SCAN, ".1 second")
+  field(FLNK, "PyDev:Threads:Print1")
+}
+record(stringout, "PyDev:Threads:Print1") {
+  field(DTYP, "pydev")
+  field(OUT,  "@print(time.asctime() + ': 1Hz timer')")
+}
+record(longout, "PyDev:Threads:Exec2") {
+  field(DTYP, "pydev")
+  field(OUT,  "@time.sleep(2.0)")
+#  field(SCAN, ".1 second")
+  field(FLNK, "PyDev:Threads:Print2")
+}
+record(stringout, "PyDev:Threads:Print2") {
+  field(DTYP, "pydev")
+  field(OUT,  "@print(time.asctime() + ': 2Hz timer')")
+}

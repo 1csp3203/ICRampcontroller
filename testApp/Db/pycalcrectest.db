@@ -1,0 +1,51 @@
+record(ai, "PyCalcTest:Input1") {
+    field(INP,  "1")
+}
+record(ai, "PyCalcTest:Input2") {
+    field(INP,  "6.4")
+}
+record(longin, "PyCalcTest:Output") {
+    field(VAL,  "-1")
+}
+record(pycalc, "PyCalcTest:MathExpr") {
+    field(INPA, "17")
+    field(INPB, "3")
+    field(CALC, "A*B")
+}
+record(pycalc, "PyCalcTest:AdaptiveTypes") {
+    field(INPA, "PyCalcTest:Input1 CP")
+    field(INPB, "PyCalcTest:Input2 CP")
+    field(FTA,  "LONG")
+    field(FTB,  "DOUBLE")
+    field(CALC, "pow(max([A, B]), 2)")
+    field(FTVL, "LONG")
+    field(OUT,  "PyCalcTest:Output PP")
+}
+record(pycalc, "PyCalcTest:InvalidAlarm") {
+    field(CALC, "unknown_function()")
+}
+
+record(waveform, "PyCalcTest:InputNumbers") {
+    field(FTVL, "DOUBLE")
+    field(NELM, "3")
+    # Only works with EPICS 7.0.2+
+    field(INP,  [1.7, 2.3, 14.91])
+}
+record(waveform, "PyCalcTest:InputStrings") {
+    field(FTVL, "STRING")
+    field(NELM, "3")
+    # Only works with EPICS 7.0.2+
+    field(INP,  [one, two, three])
+}
+record(pycalc, "PyCalcTest:MergeArrays") {
+    field(INPA, "PyCalcTest:InputNumbers")
+    field(INPB, "PyCalcTest:InputStrings")
+    field(FTA,  "DOUBLE")
+    field(FTB,  "STRING")
+    field(MEA,  "10")
+    field(MEB,  "10")
+    field(CALC, "list(map(lambda tuple: tuple[1]+':'+str(tuple[0]), zip(A,B)))")
+    field(FTVL, "STRING")
+    field(MEVL, "10")
+    field(PINI, "1")
+}

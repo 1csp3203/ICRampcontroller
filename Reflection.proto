@@ -1,0 +1,14 @@
+# Reflection.proto
+
+# デバイスからの応答の終端をCR LFに設定
+Terminator = CR LF;
+
+setUnit {
+    out ":UNIT1:REFLection RL";  # ユニット1の反射損失を設定
+}
+
+# 反射率取得コマンド
+getSWR {
+    out ":UNIT1:POWer:REFLection?";  # ユニット1の設定を取得
+    in "%f";                         # SWR値を浮動小数点で受け取る
+}
