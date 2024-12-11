@@ -2,7 +2,7 @@
 record(ai, "SWR") {
     field(DESC, "Standing Wave Ratio")
     field(SCAN, "1 second")          # 必要に応じて変更
-    ## field(DTYP, "stream")            # StreamDeviceを使用
+    field(DTYP, "stream")            # StreamDeviceを使用
     field(INP, "@Reflection.proto getSWR L0")
 }
 

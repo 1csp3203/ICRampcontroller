@@ -19,7 +19,7 @@ pydev("from Motor2 import PhidgetServoController")
 ## ---------ここから
 dbLoadRecords("${TOP}/testApp/Db/pydevtest.db","P=GID:,R=,L=0,A=0")
 epicsEnvSet("STREAM_PROTOCOL_PATH","${TOP}")
-drvAsynSerialPortConfigure("L0","/dev/ttyS0",0,1,0)
+drvAsynSerialPortConfigure("L0","/dev/ttyUSB0",0,1,0)
 asynSetOption("L0", -1, "baud","9600")
 asynSetOption("L0", -1, "bits","8")
 asynSetOption("L0", -1, "parity", "none") 
