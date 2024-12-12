@@ -1,5 +1,5 @@
 epicsEnvSet("IOC","iocpydev")
-epicsEnvSet("TOP","/home/pla/modules/pydevice")
+epicsEnvSet("TOP","/home/pla/modules/ICRampcontroller")
 epicsEnvSet("EPICS_BASE","/home/pla/base")
 epicsEnvSet("ASYN","/home/pla/modules/asyn")
 epicsEnvSet("STREAM","/home/pla/modules/stream")
